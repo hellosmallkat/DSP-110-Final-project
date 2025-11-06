@@ -4,42 +4,116 @@ output: html_document
 date: "2025-10-24"
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 ```{r}
 library(Lock5withR)
 library(dplyr)
+library(ggplot2)
+```
+
+
+```{r}
 data(SleepStudy)
 head(SleepStudy)
 ```
-```{r}
-filtererd_sleepStudy <- SleepStudy %>%
-  filter(LarkOwl == "Owl" | LarkOwl == "Lark" ) +
-  select(AverageSleep, Gender, EarlyClass, PoorSleepQuality, ClassesMissed,AllNighter )
 
-head(filtererd_sleepStudy)
+
+```{r}
+#filtering to keep variables that we need
+filtered_sleepStudy <- SleepStudy %>%
+  select(Sex, PoorSleepQuality,LarkOwl, ClassesMissed, GPA)
+
+# spliting up the Lark owl into databse which have only owl, lark or neither
+Neither_owl_or_Larks <- filtered_sleepStudy %>%
+  filter(LarkOwl == "Neither")
+only_owl <- filtered_sleepStudy %>%
+  filter(LarkOwl == 'Owl')
+only_Lark <- filtered_sleepStudy %>%
+  filter(LarkOwl == 'Lark')
+```
+
+
+```{r}
+# creating a bar graph to see the sex disruption among each group 
+ggplot(Neither_owl_or_Larks, aes(x = Sex)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = "Count of Neither Owl nor Lark by Sex",
+       x = "Sex of Person",
+       y = "Count")
+
+ggplot(only_owl, aes(x = Sex)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = "Count of only Owl by Sex",
+       x = "Sex of Person",
+       y = "Count")
+
+ggplot(only_Lark, aes(x = Sex)) +
+  geom_bar(fill = "skyblue") +
+  labs(title = "Count of only Lark by Sex",
+       x = "Sex of Person",
+       y = "Count")
 
 
 ```
 
+```{r}
+#creating a histogram to see distribution of sleep quality 
+ggplot(Neither_owl_or_Larks, aes(x = PoorSleepQuality))+
+  labs(title = "Count of Neither Owl nor Lark by Sleep Quality",
+       x = "Sleep Quality",
+       y = "Count") +
+  geom_histogram(bins = 15)
+ggplot(only_owl, aes(x = PoorSleepQuality))+
+   labs(title = "Count of Owl by Sleep Quality",
+       x = "Sleep Quality",
+       y = "Count") +
+  geom_histogram(bins = 15)
+ggplot(only_Lark, aes(x = PoorSleepQuality))+
+   labs(title = "Count of Lark by Sleep Quality",
+       x = "Sleep Quality",
+       y = "Count") +
+  geom_histogram(bins = 15)
+```
+
+
+```{r}
+#scatter plot of sleep quality vs gpa on each group
+ggplot(data = Neither_owl_or_Larks, aes(x = PoorSleepQuality, y = GPA)) +
+  labs(title = "GPA of Neither Owl nor Lark by Sleep Quality",
+       x = "Sleep Quality",
+       y = "GPA") +
+  geom_point()
+ggplot(data = only_owl, aes(x = PoorSleepQuality, y = GPA)) +
+  labs(title = "GPA of Owl by Sleep Quality",
+       x = "Sleep Quality",
+       y = "GPA") +
+  geom_point()
+ggplot(data = only_Lark, aes(x = PoorSleepQuality, y = GPA)) +
+  labs(title = "GPA of Lark by Sleep Quality",
+       x = "Sleep Quality",
+       y = "GPA") +
+  geom_point()
+
+```
+
+```{r}
+# box plots of sleep quality vs classes missed divided by sex
+ggplot(Neither_owl_or_Larks, aes(x = factor(PoorSleepQuality), y = ClassesMissed, fill = Sex)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Classes Missed by Sleep Quality and Sex",
+       x = "Poor Sleep Quality",
+       y = "Classes Missed",
+       fill = "Sex")
+ggplot(only_owl, aes(x = factor(PoorSleepQuality), y = ClassesMissed, fill = Sex)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Classes Missed by Sleep Quality and Sex",
+       x = "Poor Sleep Quality",
+       y = "Classes Missed",
+       fill = "Sex")
+ggplot(only_Lark, aes(x = factor(PoorSleepQuality), y = ClassesMissed, fill = Sex)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Classes Missed by Sleep Quality and Sex",
+       x = "Poor Sleep Quality",
+       y = "Classes Missed",
+       fill = "Sex")
+
+```
