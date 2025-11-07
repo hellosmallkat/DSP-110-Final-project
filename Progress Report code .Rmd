@@ -99,19 +99,19 @@ ggplot(data = only_Lark, aes(x = PoorSleepQuality, y = GPA)) +
 # box plots of sleep quality vs classes missed divided by sex
 ggplot(Neither_owl_or_Larks, aes(x = factor(PoorSleepQuality), y = ClassesMissed, fill = Sex)) +
   geom_boxplot() +
-  labs(title = "Distribution of Classes Missed by Sleep Quality and Sex",
+  labs(title = "Distribution of Classes Missed by Neither Owl nor Lark by Sleep Quality and Sex",
        x = "Poor Sleep Quality",
        y = "Classes Missed",
        fill = "Sex")
 ggplot(only_owl, aes(x = factor(PoorSleepQuality), y = ClassesMissed, fill = Sex)) +
   geom_boxplot() +
-  labs(title = "Distribution of Classes Missed by Sleep Quality and Sex",
+  labs(title = "Distribution of Classes Missed by Owl by Sleep Quality and Sex",
        x = "Poor Sleep Quality",
        y = "Classes Missed",
        fill = "Sex")
 ggplot(only_Lark, aes(x = factor(PoorSleepQuality), y = ClassesMissed, fill = Sex)) +
   geom_boxplot() +
-  labs(title = "Distribution of Classes Missed by Sleep Quality and Sex",
+  labs(title = "Distribution of Classes Missed by Lark by Sleep Quality and Sex",
        x = "Poor Sleep Quality",
        y = "Classes Missed",
        fill = "Sex")
